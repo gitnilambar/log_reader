@@ -6,6 +6,7 @@ import type { CSSProperties } from 'react'
 import type { LogRow } from '../types'
 import FilterInput from './FilterInput'
 import TimeFilterInput from './TimeFilterInput'
+import Button from './Button'
 import { formatTimestamp, isTimestampField } from '../utils/formatters'
 
 type LogTableProps = {
@@ -271,9 +272,9 @@ export default function LogTable({
                   ? 'No entries match the selected date range. Try adjusting your time filters.'
                   : 'Try adjusting your search or filters to find what you\'re looking for.'}
               </p>
-              <button className="ghost-button" onClick={onClearFilters}>
+              <Button variant="ghost" onClick={onClearFilters}>
                 Clear all filters
-              </button>
+              </Button>
             </div>
           )}
         </div>

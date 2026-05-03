@@ -1,6 +1,7 @@
 import React from 'react'
 import { X, FileText } from 'lucide-react'
 import { FileTab } from '../types'
+import Button from './Button'
 
 interface FileTabsProps {
   tabs: FileTab[]
@@ -39,13 +40,15 @@ export default function FileTabs({ tabs, activeId, onTabSelect, onTabClose }: Fi
               <span className="file-tab-name">{tab.name}</span>
               {tab.processing && <div className="file-tab-spinner" />}
             </div>
-            <button 
-              className="file-tab-close" 
+            <Button
+              variant="ghost"
+              size="sm"
+              isIconOnly
+              className="file-tab-close"
               onClick={(e) => onTabClose(tab.id, e)}
               aria-label="Close tab"
-            >
-              <X size={14} />
-            </button>
+              icon={<X size={14} />}
+            />
           </div>
         ))}
       </div>

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { X, Calendar, Clock } from 'lucide-react'
+import Button from './Button'
 
 type TimeRangePopupProps = {
   startDate: string
@@ -54,9 +55,14 @@ export default function TimeRangePopup({
     >
       <div className="time-range-popup__header">
         <span>Range Filter</span>
-        <button className="close-btn" onClick={onClose} title="Close">
-          <X size={14} />
-        </button>
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          isIconOnly 
+          onClick={onClose} 
+          title="Close"
+          icon={<X size={14} />}
+        />
       </div>
       
       <div className="time-range-popup__body">
@@ -87,15 +93,17 @@ export default function TimeRangePopup({
       
       {(startDate || endDate) && (
         <div className="time-range-popup__footer">
-          <button 
-            className="clear-text-btn" 
+          <Button 
+            variant="text" 
+            danger 
+            size="sm"
             onClick={() => {
               onStartDateChange('')
               onEndDateChange('')
             }}
           >
             Reset Range
-          </button>
+          </Button>
         </div>
       )}
     </div>

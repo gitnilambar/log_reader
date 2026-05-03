@@ -272,32 +272,193 @@ body {
 }
 .status-pill-small.error .value { color: var(--error); }
 
+/* ── Design Tokens ── */
+:root {
+  --btn-height-sm: 32px;
+  --btn-height-md: 40px;
+  --btn-height-lg: 48px;
+  --btn-radius: 10px;
+  --btn-font-size: 14px;
+}
+
 .header-actions {
   display: flex;
-  gap: 8px;
+  gap: 12px;
   align-items: center;
 }
 
 .button-group {
   display: flex;
   background: var(--surface-2);
-  padding: 2px;
+  padding: 4px;
   border-radius: 999px;
   border: 1px solid var(--border);
+  gap: 4px;
 }
 
-.ghost-button.icon-only {
-  padding: 8px;
-  width: 36px;
-  height: 36px;
+/* ── Base Button System ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
-  border: none;
-  background: transparent;
+  gap: 8px;
+  height: var(--btn-height-md);
+  padding: 0 16px;
+  border-radius: var(--btn-radius);
+  font-family: inherit;
+  font-size: var(--btn-font-size);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+  outline: none;
+  white-space: nowrap;
+  user-select: none;
+  position: relative;
 }
 
-.ghost-button.icon-only:hover {
-  background: var(--surface);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(1);
+}
+
+.btn:focus-visible {
+  box-shadow: 0 0 0 3px var(--accent-soft);
+  border-color: var(--accent);
+}
+
+/* Variants */
+.btn-primary {
+  background: var(--accent);
+  color: white;
+  box-shadow: 0 4px 12px rgba(43, 124, 255, 0.2);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #1d69e6;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(43, 124, 255, 0.25);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+  background: #1656c5;
+}
+
+.btn-secondary {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #d9e8ff;
+}
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.btn-outline:hover:not(:disabled) {
+  background: var(--surface-2);
+  border-color: #cbd5e1;
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--muted);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.btn-text {
+  background: transparent;
+  border-color: transparent;
+  color: var(--accent);
+  padding: 0 8px;
+  height: auto;
+}
+
+.btn-text:hover:not(:disabled) {
+  text-decoration: underline;
+}
+
+/* Danger Modifier */
+.btn-danger {
+  color: var(--error);
+}
+
+.btn-primary.btn-danger {
+  background: var(--error);
+  color: white;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+}
+
+.btn-primary.btn-danger:hover:not(:disabled) {
+  background: #b91c1c;
+  box-shadow: 0 6px 16px rgba(220, 38, 38, 0.25);
+}
+
+.btn-outline.btn-danger {
+  border-color: #fee2e2;
+}
+
+.btn-outline.btn-danger:hover:not(:disabled) {
+  background: #fef2f2;
+  border-color: var(--error);
+}
+
+/* Sizes */
+.btn-sm {
+  height: var(--btn-height-sm);
+  padding: 0 12px;
+  font-size: 13px;
+  gap: 6px;
+}
+
+.btn-lg {
+  height: var(--btn-height-lg);
+  padding: 0 24px;
+  font-size: 16px;
+}
+
+/* Icon Only */
+.btn-icon-only {
+  width: var(--btn-height-md);
+  padding: 0;
+}
+
+.btn-sm.btn-icon-only { width: var(--btn-height-sm); }
+.btn-lg.btn-icon-only { width: var(--btn-height-lg); }
+
+/* Loading State */
+.btn-loading {
+  color: transparent !important;
+  pointer-events: none;
+}
+
+.btn-spinner {
+  position: absolute;
+  animation: spin 1s linear infinite;
+  color: currentColor;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.btn-icon-left, .btn-icon-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .dropzone {
@@ -352,15 +513,6 @@ body {
   border-color: var(--accent);
 }
 
-.ghost-button.danger {
-  color: var(--error);
-  border-color: #fee2e2;
-}
-
-.ghost-button.danger:hover {
-  background: #fef2f2;
-  border-color: var(--error);
-}
 
 .paste-actions {
   display: flex;

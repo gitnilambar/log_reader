@@ -4,6 +4,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import type { LogRow } from '../types'
 import CopyButton from './CopyButton'
+import Button from './Button'
 import { formatTimestamp, isTimestampField } from '../utils/formatters'
 
 type PreviewModalProps = {
@@ -67,9 +68,14 @@ export default function PreviewModal({
               label="Copy full JSON to clipboard"
             />
 
-            <button className="icon-button" onClick={onClose} type="button" aria-label="Close">
-              <X size={18} />
-            </button>
+            <Button
+              variant="ghost"
+              size="sm"
+              isIconOnly
+              onClick={onClose}
+              aria-label="Close"
+              icon={<X size={18} />}
+            />
           </div>
         </div>
 
@@ -153,15 +159,25 @@ export default function PreviewModal({
 
         {/* ── Footer ── */}
         <div className="modal__footer">
-          <div className="footer-nav">
-            <button className="ghost-button" onClick={onPrev} disabled={!hasPrev} type="button">
-              <ChevronLeft size={16} />
+          <div className="footer-nav" style={{ display: 'flex', gap: '8px' }}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onPrev}
+              disabled={!hasPrev}
+              icon={<ChevronLeft size={16} />}
+            >
               Previous
-            </button>
-            <button className="ghost-button" onClick={onNext} disabled={!hasNext} type="button">
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onNext}
+              disabled={!hasNext}
+              iconRight={<ChevronRight size={16} />}
+            >
               Next
-              <ChevronRight size={16} />
-            </button>
+            </Button>
           </div>
           <div className="modal__meta">
             {row.valid ? `${Object.keys(row.data).length} fields • Valid JSON` : 'Raw Text'}

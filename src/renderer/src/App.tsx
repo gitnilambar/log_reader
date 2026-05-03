@@ -5,6 +5,7 @@ import LogTable from './components/LogTable'
 import PreviewModal from './components/PreviewModal'
 import ProgressCard from './components/ProgressCard'
 import FileTabs from './components/FileTabs'
+import Button from './components/Button'
 import { useDebouncedValue } from './hooks/useDebouncedValue'
 import { rowsToCsv } from './utils/csv'
 import { deepMatch } from './utils/search'
@@ -433,25 +434,45 @@ export default function App() {
 
           <div className="header-actions">
             {files.length > 0 && (
-              <button className="ghost-button danger" onClick={handleClearAll} type="button" title="Clear All">
-                <Ban size={18} />
-              </button>
+              <Button
+                variant="ghost"
+                danger
+                isIconOnly
+                onClick={handleClearAll}
+                title="Clear All"
+                icon={<Ban size={18} />}
+              />
             )}
-            <button className="ghost-button" onClick={handleLoadMockData} type="button">Mock</button>
-            <button className="ghost-button" onClick={() => setShowPaste(!showPaste)} type="button">
+            <Button variant="ghost" onClick={handleLoadMockData}>Mock</Button>
+            <Button variant="ghost" onClick={() => setShowPaste(!showPaste)}>
               {showPaste ? 'Upload' : 'Paste'}
-            </button>
-            <button className="primary-button" onClick={async () => {
-              const paths = await window.api.openLogDialog()
-              if (paths.length) handleStart(paths)
-            }} type="button">
-              <FileSearch size={18} />
+            </Button>
+            <Button
+              variant="primary"
+              onClick={async () => {
+                const paths = await window.api.openLogDialog()
+                if (paths.length) handleStart(paths)
+              }}
+              icon={<FileSearch size={18} />}
+            >
               Select files
-            </button>
+            </Button>
             {activeFile && (
               <div className="button-group">
-                <button className="ghost-button icon-only" onClick={() => handleExport('json')} title="Export JSON"><FileDown size={18} /></button>
-                <button className="ghost-button icon-only" onClick={() => handleExport('csv')} title="Export CSV"><FileDown size={18} /></button>
+                <Button
+                  variant="ghost"
+                  isIconOnly
+                  onClick={() => handleExport('json')}
+                  title="Export JSON"
+                  icon={<FileDown size={18} />}
+                />
+                <Button
+                  variant="ghost"
+                  isIconOnly
+                  onClick={() => handleExport('csv')}
+                  title="Export CSV"
+                  icon={<FileDown size={18} />}
+                />
               </div>
             )}
           </div>
@@ -489,14 +510,14 @@ export default function App() {
             )}
           </div>
 
-          <button
-            className={`toolbar-filter toggle-button ${activeFile.useDynamicColumns ? 'active' : ''}`}
+          <Button
+            variant={activeFile.useDynamicColumns ? 'secondary' : 'outline'}
             onClick={() => updateActiveFile({ useDynamicColumns: !activeFile.useDynamicColumns })}
-            type="button"
+            icon={<Filter size={16} />}
+            size="sm"
           >
-            <Filter size={16} />
-            <span>{visibleColumns.length} columns (Dynamic: {activeFile.useDynamicColumns ? 'ON' : 'OFF'})</span>
-          </button>
+            {visibleColumns.length} columns (Dynamic: {activeFile.useDynamicColumns ? 'ON' : 'OFF'})
+          </Button>
         </section>
       )}
 
@@ -512,8 +533,14 @@ export default function App() {
               placeholder="Paste your log data here (each line should be JSON)..."
             />
             <div className="paste-actions">
-              <button className="primary-button" onClick={handleParsePaste} disabled={!pasteText.trim()}>Parse Logs</button>
-              <button className="ghost-button" onClick={() => setShowPaste(false)}>Cancel</button>
+              <Button
+                variant="primary"
+                onClick={handleParsePaste}
+                disabled={!pasteText.trim()}
+              >
+                Parse Logs
+              </Button>
+              <Button variant="ghost" onClick={() => setShowPaste(false)}>Cancel</Button>
             </div>
           </div>
         )}

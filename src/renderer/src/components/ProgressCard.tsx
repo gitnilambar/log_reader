@@ -1,5 +1,6 @@
 import { Loader2 } from 'lucide-react'
 import type { LogProgressPayload } from '../types'
+import Button from './Button'
 
 type ProgressCardProps = {
   progress: LogProgressPayload
@@ -16,9 +17,9 @@ export default function ProgressCard({ progress, onCancel }: ProgressCardProps) 
           <Loader2 size={16} className="spin" />
           Processing files
         </div>
-        <button className="ghost-button" onClick={onCancel} type="button">
+        <Button variant="ghost" size="sm" onClick={onCancel}>
           Cancel
-        </button>
+        </Button>
       </div>
       <div className="progress-card__meta">
         <div>

@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { CalendarClock } from 'lucide-react'
 import TimeRangePopup from './TimeRangePopup'
+import Button from './Button'
 
 type TimeFilterInputProps = {
   column: string
@@ -35,13 +36,14 @@ export default function TimeFilterInput({
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
         />
-        <button 
-          className={`time-popup-trigger ${hasRangeActive ? 'active' : ''}`}
+        <Button 
+          variant={hasRangeActive ? 'secondary' : 'ghost'}
+          size="sm"
+          isIconOnly
           onClick={() => setIsPopupOpen(!isPopupOpen)}
           title="Open Date-Time Range Picker"
-        >
-          <CalendarClock size={16} />
-        </button>
+          icon={<CalendarClock size={16} />}
+        />
       </div>
 
       {isPopupOpen && (

@@ -1,5 +1,6 @@
 import { useCallback, useRef, useState } from 'react'
-import { Check, Copy } from 'lucide-react'
+import { Check, Copy, AlertCircle } from 'lucide-react'
+import Button from './Button'
 
 type CopyButtonProps = {
   /** The text that will be written to the clipboard */
@@ -18,14 +19,6 @@ type CopyState = 'idle' | 'copied' | 'error'
 
 /**
  * A self-contained, reusable Copy-to-clipboard button.
- *
- * Features:
- * - Uses the modern navigator.clipboard.writeText() API
- * - Falls back to a visible error state if clipboard is unavailable
- * - Shows a "Copied!" confirmation for 1.8 s then reverts to "Copy"
- * - Zero prop-drilling required; receives only the text to copy
- * - Uses useRef for the reset timer so it never causes stale-closure bugs
- *   and never triggers unnecessary parent re-renders
  */
 export default function CopyButton({
   text,
@@ -47,7 +40,6 @@ export default function CopyButton({
       await navigator.clipboard.writeText(text)
       setState('copied')
     } catch {
-      // Clipboard API unavailable (e.g. non-secure context)
       setState('error')
     }
 
@@ -60,41 +52,34 @@ export default function CopyButton({
   const isCopied = state === 'copied'
   const isError  = state === 'error'
 
-  const baseClass = `copy-btn copy-btn--${variant} ${isCopied ? 'copy-btn--copied' : ''} ${isError ? 'copy-btn--error' : ''} ${className}`.trim()
-
   if (variant === 'icon') {
     return (
-      <button
+      <Button
         type="button"
-        className={baseClass}
+        variant="ghost"
+        size="sm"
+        isIconOnly
+        className={className}
         onClick={handleCopy}
         title={isCopied ? 'Copied!' : isError ? 'Copy failed' : label}
         aria-label={label}
-      >
-        {isCopied ? <Check size={14} /> : <Copy size={14} />}
-      </button>
+        icon={isCopied ? <Check size={14} className="success" /> : isError ? <AlertCircle size={14} className="error" /> : <Copy size={14} />}
+      />
     )
   }
 
   return (
-    <button
+    <Button
       type="button"
-      className={baseClass}
+      variant="outline"
+      size="sm"
+      className={`${isCopied ? 'btn-copied' : ''} ${className}`}
       onClick={handleCopy}
       title={isError ? 'Clipboard unavailable' : label}
       aria-label={label}
+      icon={isCopied ? <Check size={13} /> : isError ? <AlertCircle size={13} /> : <Copy size={13} />}
     >
-      {isCopied ? (
-        <>
-          <Check size={13} />
-          <span>Copied!</span>
-        </>
-      ) : (
-        <>
-          <Copy size={13} />
-          <span>{isError ? 'Failed' : 'Copy'}</span>
-        </>
-      )}
-    </button>
+      {isCopied ? 'Copied!' : isError ? 'Failed' : 'Copy'}
+    </Button>
   )
 }
