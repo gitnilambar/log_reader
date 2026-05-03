@@ -38,3 +38,25 @@ export type LogErrorPayload = {
   processId: string
   message: string
 }
+
+export interface FileTab {
+  id: string; // unique id for the tab
+  processId: string | null; // associated process id
+  name: string; // display name
+  rows: LogRow[];
+  columns: string[];
+  stats: LogStats;
+  processing: boolean;
+  progress: LogProgressPayload | null;
+  error: string | null;
+  
+  // Filters and state per file
+  globalSearch: string;
+  columnFilters: Record<string, string>;
+  startDate: string;
+  endDate: string;
+  sortBy: string;
+  sortDir: 'asc' | 'desc';
+  selectedIndex: number | null;
+  useDynamicColumns: boolean;
+}

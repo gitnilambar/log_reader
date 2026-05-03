@@ -5,8 +5,7 @@ import icon from '../../resources/icon.png?asset'
 import { createLogProcessor, type LogChunkPayload, type LogDonePayload, type LogErrorPayload, type LogProgressPayload } from './logProcessor'
 import { writeFile } from 'fs/promises'
 
-let activeProcessor: ReturnType<typeof createLogProcessor> | null = null
-let activeProcessId: string | null = null
+const activeProcessors = new Map<string, ReturnType<typeof createLogProcessor>>()
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -67,26 +66,28 @@ app.whenReady().then(() => {
       return { processId: null }
     }
 
-    if (activeProcessor) {
-      activeProcessor.cancel()
-    }
-
     const processId = createProcessId()
-    activeProcessId = processId
-
     const sender = event.sender
+    
     const processor = createLogProcessor({
       filePaths: payload.filePaths,
       batchSize: 400,
       processId,
       onChunk: (data: LogChunkPayload) => sender.send('logs:chunk', data),
       onProgress: (data: LogProgressPayload) => sender.send('logs:progress', data),
-      onDone: (data: LogDonePayload) => sender.send('logs:done', data),
-      onError: (data: LogErrorPayload) => sender.send('logs:error', data)
+      onDone: (data: LogDonePayload) => {
+        activeProcessors.delete(processId)
+        sender.send('logs:done', data)
+      },
+      onError: (data: LogErrorPayload) => {
+        activeProcessors.delete(processId)
+        sender.send('logs:error', data)
+      }
     })
 
-    activeProcessor = processor
+    activeProcessors.set(processId, processor)
     processor.start().catch((error) => {
+      activeProcessors.delete(processId)
       sender.send('logs:error', {
         processId,
         message: error instanceof Error ? error.message : 'Unknown processing error'
@@ -97,8 +98,10 @@ app.whenReady().then(() => {
   })
 
   ipcMain.handle('logs:cancel', async (_event, processId: string) => {
-    if (processId && processId === activeProcessId) {
-      activeProcessor?.cancel()
+    const processor = activeProcessors.get(processId)
+    if (processor) {
+      processor.cancel()
+      activeProcessors.delete(processId)
     }
     return { cancelled: true }
   })
